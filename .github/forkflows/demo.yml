@@ -1,0 +1,14 @@
+name: IaC avec Bicep
+
+on: workflow_dispatch
+
+jobs:
+  Build-IaC:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name : check Bicep
+        run: |
+          az bicep version
+          
+

@@ -1,0 +1,29 @@
+- name: Using Azure collection
+  hosts: localhost
+  
+  vars:
+    rg_name: RG_Bench_Ansible
+    location: westeurope
+    WebSiteName: site-ansible-007
+    AppPlanServiceName: AppPlanService_Ansible
+    sku: B1
+    image: nginxdemos/hello
+    version: latest
+
+  tasks:
+    - azure.azcollection.azure_rm_webapp:
+        resource_group: "{{ rg_name }}"
+        name: "{{ WebSiteName }}"
+        plan: 
+          resource_group: "{{ rg_name }}"
+          name: "{{ AppPlanServiceName }}"
+          sku: "{{ sku }}"
+          is_linux: true
+          number_of_workers: 1
+        app_settings:
+          DOCKER_REGISTRY_SERVER_URL: 'https://index.docker.io'
+          DOCKER_REGISTRY_SERVER_USERNAME: ''
+          DOCKER_REGISTRY_SERVER_PASSWORD: ''                    
+          WEBSITE_ENABLE_APP_SERVICE_STORAGE: false
+        container_settings:
+          name: '{{ image }}:{{ version }}'
