@@ -22,4 +22,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: arm_template
-          path: ./bicep/main.json
+          path: ./Bicep/main.json
