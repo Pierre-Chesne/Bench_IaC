@@ -9,6 +9,7 @@ jobs:
     steps:
       - name : check Bicep
         run: |
+          az bicep install
           az bicep version
           
 
