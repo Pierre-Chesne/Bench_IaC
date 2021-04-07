@@ -7,9 +7,19 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name : check Bicep
+      - name: Check Bicep
         run: |
           az bicep install
-          az bicep version
-          
 
+      - name: Recuperation du repo
+        uses: Actions/checkout@v2
+
+      - name: Build en "json"
+        run: |
+          az bicep build --files ./Bicep/main.bicep
+
+      - name: Artifacts json
+        uses: actions/upload-artifact@v1
+        with:
+          name: arm_template
+          path: ./bicep/main.json
