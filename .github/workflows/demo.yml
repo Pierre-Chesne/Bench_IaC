@@ -2,6 +2,10 @@ name: IaC avec Bicep
 
 on: workflow_dispatch
 
+env:
+  RG_NAME: RG-Test-WhatIf
+  LOCATION: westeurope
+
 jobs:
   Build-IaC:
     runs-on: ubuntu-20.04
@@ -17,6 +21,19 @@ jobs:
       - name: Build en "json"
         run: |
           az bicep build --files ./Bicep/main.bicep
+
+      - name: Login Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Creation du RG pour test
+        run: |
+          az group create --name ${{ env.RG_NAME }} --location ${{ env.LOCATION }}
+
+      - name: WhatIf Template ARM
+        run: |
+          az deployment group what-if --resource-group ${{ env.RG_NAME }} --template-file ./Bicep/main.json                  
 
       - name: Artifacts json
         uses: actions/upload-artifact@v1
